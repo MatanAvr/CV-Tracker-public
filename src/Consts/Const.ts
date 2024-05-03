@@ -60,7 +60,7 @@ export const testEntries: EntryType[] = [
     id: "en-RcghHaLUTXSGS63Y_LsRF",
     date: "15/04/2024",
     company: "Amazon",
-    role: "very long role name, at least 6 words",
+    role: "very long role name",
     link: "http://www.amazon.com",
     status: "HR call",
     notes:

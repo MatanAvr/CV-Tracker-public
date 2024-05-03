@@ -1,10 +1,15 @@
 import { z } from "zod";
-import { Entry, Status, User, UserLinks } from "../Schemes/Schemes";
+import {
+  EntrySchema,
+  StatusEnum,
+  UserSchema,
+  UserLinksSchema,
+} from "../Schemas/Schemas";
 
-export type StatusType = z.infer<typeof Status>;
-export type EntryType = z.infer<typeof Entry>;
-export type UserType = z.infer<typeof User>;
-export type UserLinksType = z.infer<typeof UserLinks>;
+export type StatusType = z.infer<typeof StatusEnum>;
+export type EntryType = z.infer<typeof EntrySchema>;
+export type UserType = z.infer<typeof UserSchema>;
+export type UserLinksType = z.infer<typeof UserLinksSchema>;
 
 export const statusArr: StatusType[] = [
   "Sent CV",

@@ -6,12 +6,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import cloneDeep from "lodash.clonedeep";
 
-import {
-  emptyEntry,
-  testUser,
-  LOCAL_STORAGE_DATA_KEY,
-  emptyUser,
-} from "../Consts/Const";
+import { LOCAL_STORAGE_DATA_KEY, emptyEntry, testUser } from "../Consts/Const";
 import MainTable from "./MainTable";
 import {
   SnackBarColorsType,
@@ -19,11 +14,9 @@ import {
   UserType,
   EntryType,
 } from "../Types/Types";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, Fab, Tooltip, Typography } from "@mui/material";
-// import LoadingSpinner from "./LoadingSpinner";
 import { Copyright } from "./Copyright";
-import EntryModal from "./EntryModal";
 import UserLinksModal from "./UserLinksModal";
 import { UserLinks } from "./UserLinks";
 import {
@@ -32,6 +25,8 @@ import {
   saveInLocalStorage,
 } from "../Utils/Utils";
 import SnackBarHandler from "./SnackBarHandler";
+import { EntryFormModal } from "./Forms/EntryFormModal";
+import { isValidEntry, isValidUser } from "../Schemas/schemeValidators";
 
 type DashboardProps = {
   user: UserType;
@@ -39,8 +34,6 @@ type DashboardProps = {
 
 export const Dashboard = ({ user }: DashboardProps) => {
   const [currentUser, setCurrentUser] = useState<UserType>(user);
-  const [entries, setEntries] = useState<EntryType[]>(user.entries);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [entryToEdit, setEntryToEdit] = useState<EntryType>();
   const [userLinksToEdit, setUserLinksToEdit] = useState<UserLinksType>();
 
@@ -59,10 +52,6 @@ export const Dashboard = ({ user }: DashboardProps) => {
     currentUser.personalWebsiteLink,
   ]);
 
-  useEffect(() => {
-    setEntries(currentUser.entries);
-  }, [currentUser.id]);
-
   const [isSnackBarOpen, setIsSnackBarOpen] = useState<boolean>(false);
   const [snackBarMessage, setSnackBarMessage] = useState<string>("");
   const [snackBarColor, setSnackBarColor] =
@@ -74,6 +63,16 @@ export const Dashboard = ({ user }: DashboardProps) => {
     const updatedUser = { ...currentUser, ...newUserLinksClone };
     setCurrentUser(() => updatedUser);
     openSnackBar("Links saved successfully", "success");
+    saveUserToLocalStorage(updatedUser);
+  };
+
+  const updateUserEntries = (newEntries: EntryType[]) => {
+    if (!currentUser) return;
+    const newUserEntries = cloneDeep(newEntries);
+    const updatedUser = { ...currentUser, entries: [...newUserEntries] };
+    setCurrentUser(() => updatedUser);
+    openSnackBar("Links saved successfully", "success");
+    saveUserToLocalStorage(updatedUser);
   };
 
   const createEntryHandler = (newEntry: EntryType) => {
@@ -83,18 +82,21 @@ export const Dashboard = ({ user }: DashboardProps) => {
       newEntryClone.date = new Date().toLocaleDateString();
     }
 
-    setEntries((entries) => [...entries, newEntryClone]);
+    // setEntries((entries) => [...entries, newEntryClone]);
+    updateUserEntries([...currentUser.entries, newEntryClone]);
     openSnackBar("Entry saved successfully", "success");
   };
 
   const updateEntryHandler = (entryToUpdate: EntryType) => {
-    const entriesClone = cloneDeep(entries);
+    const entriesClone = cloneDeep(currentUser.entries);
     const relevantEntryIndex = entriesClone.findIndex(
       (el) => el.id === entryToUpdate.id
     );
     if (relevantEntryIndex !== -1) {
       entriesClone[relevantEntryIndex] = entryToUpdate;
-      setEntries(() => [...entriesClone]);
+      // setEntries(() => [...entriesClone]);
+      updateUserEntries([...entriesClone]);
+
       openSnackBar("Entry updated successfully", "success");
     } else {
       console.error(
@@ -104,20 +106,21 @@ export const Dashboard = ({ user }: DashboardProps) => {
   };
 
   const deleteEntryByIdHandler = (idToDelete: string) => {
-    if (!entries) {
+    if (!currentUser.entries) {
       console.error("[deleteEntryByIdHandler] There is no data");
       return;
     }
-    const clonedEntries = cloneDeep(entries);
+    const clonedEntries = cloneDeep(currentUser.entries);
     const filteredEntries = clonedEntries.filter(
       (entry) => entry.id !== idToDelete
     );
-    setEntries(() => filteredEntries);
+    // setEntries(() => filteredEntries);
+    updateUserEntries(filteredEntries);
     openSnackBar("Entry deleted successfully", "success");
   };
 
   const editEntryByIdHandler = (idToEdit: string) => {
-    const dataClone = cloneDeep(entries);
+    const dataClone = cloneDeep(currentUser.entries);
     const relevantEntry = dataClone.find((entry) => entry.id === idToEdit);
     if (relevantEntry) {
       setEntryToEdit(relevantEntry);
@@ -145,8 +148,58 @@ export const Dashboard = ({ user }: DashboardProps) => {
     setSnackBarMessage("");
   };
 
+  const saveUserToLocalStorage = (updatedUser: UserType) => {
+    const userClone = cloneDeep(updatedUser);
+    const validUser = isValidUser(userClone);
+    if (validUser) {
+      console.log(userClone);
+      saveInLocalStorage(LOCAL_STORAGE_DATA_KEY, userClone);
+    } else {
+      openSnackBar("Save error", "error");
+    }
+  };
+
   return (
     <>
+      {true && (
+        <Box>
+          <Button
+            onClick={() => deleteFromLocalStorage(LOCAL_STORAGE_DATA_KEY)}
+          >
+            delete
+          </Button>
+          <Button
+            onClick={() => saveInLocalStorage(LOCAL_STORAGE_DATA_KEY, testUser)}
+          >
+            test user save
+          </Button>
+          <Button
+            onClick={() => {
+              const tempUser = loadFromLocalStorage(LOCAL_STORAGE_DATA_KEY);
+              setCurrentUser(tempUser);
+            }}
+          >
+            Load from local storage
+          </Button>
+          <Button onClick={() => saveUserToLocalStorage(currentUser)}>
+            Save
+          </Button>
+          <Button onClick={() => console.log(currentUser)}>Print user</Button>
+          <Button onClick={() => isValidUser(currentUser)}>
+            Validate user
+          </Button>
+          <Button onClick={() => console.log(currentUser.entries)}>
+            Print user entries
+          </Button>
+          <Button
+            onClick={() => {
+              currentUser.entries.forEach((entry) => isValidEntry(entry));
+            }}
+          >
+            Validate entries
+          </Button>
+        </Box>
+      )}
       <Container
         maxWidth="xl"
         sx={{
@@ -180,64 +233,15 @@ export const Dashboard = ({ user }: DashboardProps) => {
               <EditRoundedIcon color="primary" />
             </IconButton>
           </Tooltip>
-          {/* ********************************************************************************************************************** */}
-          {/* ********************************************************************************************************************** */}
-          {/* ********************************************************************************************************************** */}
-          {true && (
-            <Box>
-              <Button onClick={() => console.log(entries)}>
-                Print entries
-              </Button>
-              <Button onClick={() => console.log(currentUser)}>
-                Print User
-              </Button>
-              <Button
-                onClick={() => {
-                  deleteFromLocalStorage(LOCAL_STORAGE_DATA_KEY);
-                  setCurrentUser(emptyUser);
-                }}
-              >
-                Delete user
-              </Button>
-              <Button
-                onClick={() =>
-                  saveInLocalStorage(LOCAL_STORAGE_DATA_KEY, testUser)
-                }
-              >
-                Create user
-              </Button>
-              <Button
-                onClick={() => {
-                  const a = loadFromLocalStorage(LOCAL_STORAGE_DATA_KEY);
-                  if (a) setCurrentUser(a);
-                }}
-              >
-                Load user
-              </Button>
-              {/* <Button
-          onClick={() => console.log(generateIdWithPrefix(USER_PREFIX))}
-        >
-          generateUsId
-        </Button> */}
-              {/* <Button
-          onClick={() => console.log(generateIdWithPrefix(ENTRY_PREFIX))}
-        >
-          generateEnId
-        </Button> */}
-            </Box>
-          )}
-          {/* ********************************************************************************************************************** */}
-          {/* ********************************************************************************************************************** */}
-          {/* ********************************************************************************************************************** */}
         </Box>
         <Grid
           container
           // spacing={1}
           overflow={"auto"}
         >
-          {entries && entries.length > 0 ? (
+          {currentUser.entries && currentUser.entries.length > 0 ? (
             <MainTable
-              data={entries}
+              data={currentUser.entries}
               deleteHandler={deleteEntryByIdHandler}
               editHandler={editEntryByIdHandler}
             />
@@ -247,7 +251,6 @@ export const Dashboard = ({ user }: DashboardProps) => {
             </Box>
           )}
         </Grid>
-        <>{currentUser && currentUser.id}</>
       </Container>
       <Copyright />
       <SnackBarHandler
@@ -259,8 +262,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
 
       {/* Modals */}
       {entryToEdit && (
-        <EntryModal
-          open={entryToEdit ? true : false}
+        <EntryFormModal
           closeModal={() => setEntryToEdit(undefined)}
           onCreate={createEntryHandler}
           onUpdate={updateEntryHandler}

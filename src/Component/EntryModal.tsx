@@ -16,11 +16,10 @@ import { ENTRY_PREFIX, emptyEntry } from "../Consts/Const";
 import { useEffectOnce } from "../hooks/useEffectOnce";
 import { newEntryConfig } from "../Consts/Const";
 import cloneDeep from "lodash.clonedeep";
-import { isValidEntry } from "../Schemes/schemeValidators";
+import { isValidEntry } from "../Schemas/schemeValidators";
 import { generateIdWithPrefix } from "../Utils/generateIdWithPrefix";
 
 type EntryModalProps = {
-  open: boolean;
   closeModal: () => void;
   onCreate: (entry: EntryType) => void;
   onUpdate: (entryToUpdate: EntryType) => void;
@@ -28,7 +27,6 @@ type EntryModalProps = {
 };
 
 export default function EntryModal({
-  open,
   entry,
   onCreate,
   onUpdate,
@@ -99,80 +97,80 @@ export default function EntryModal({
   };
 
   return (
-    <Dialog id="entry-dialog" onClose={closeModal} open={open}>
+    <Dialog id="entry-dialog" onClose={closeModal} open={true}>
       <Stack key={"dialog-box"} gap={2} sx={{ p: 2 }}>
-        {mode}
-        <TextField
-          id={"Date".toLowerCase()}
-          label="Date"
-          value={localEntry.date}
-          size="small"
-          onChange={onChange}
-          required
-          placeholder="DD/MM/YYYY"
-        />
-
-        <TextField
-          id={"Company".toLowerCase()}
-          label="Company"
-          value={localEntry.company}
-          size="small"
-          onChange={onChange}
-          required
-        />
-
-        <TextField
-          id={"Role".toLowerCase()}
-          label="Role"
-          value={localEntry.role}
-          size="small"
-          onChange={onChange}
-          required
-        />
-
-        <TextField
-          id={"Link".toLowerCase()}
-          label="Link"
-          value={localEntry.link}
-          size="small"
-          onChange={onChange}
-        />
-
-        <FormControl>
-          <InputLabel id="status-select-label" size="small">
-            Status
-          </InputLabel>
-          <Select
-            labelId="status-select-label"
-            id={"Status".toLowerCase()}
-            value={localEntry.status}
-            label="Status"
+        <>
+          <TextField
+            id={"Date".toLowerCase()}
+            label="Date"
+            value={localEntry.date}
             size="small"
-            onChange={statusChangeHandler}
-          >
-            {statusArr.map((status, index) => {
-              return (
-                <MenuItem key={`status-menu-item-${index}`} value={status}>
-                  {status}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+            onChange={onChange}
+            required
+            placeholder="DD/MM/YYYY"
+          />
 
-        <TextField
-          id={"Notes".toLowerCase()}
-          label="Notes"
-          value={localEntry.notes}
-          size="small"
-          onChange={onChange}
-          multiline
-          rows={4}
-          helperText={`${localEntry.notes?.length}/400`}
-        />
+          <TextField
+            id={"Company".toLowerCase()}
+            label="Company"
+            value={localEntry.company}
+            size="small"
+            onChange={onChange}
+            required
+          />
 
+          <TextField
+            id={"Role".toLowerCase()}
+            label="Role"
+            value={localEntry.role}
+            size="small"
+            onChange={onChange}
+            required
+          />
+
+          <TextField
+            id={"Link".toLowerCase()}
+            label="Link"
+            value={localEntry.link}
+            size="small"
+            onChange={onChange}
+          />
+
+          <FormControl>
+            <InputLabel id="status-select-label" size="small">
+              Status
+            </InputLabel>
+            <Select
+              labelId="status-select-label"
+              id={"Status".toLowerCase()}
+              value={localEntry.status}
+              label="Status"
+              size="small"
+              onChange={statusChangeHandler}
+            >
+              {statusArr.map((status, index) => {
+                return (
+                  <MenuItem key={`status-menu-item-${index}`} value={status}>
+                    {status}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+
+          <TextField
+            id={"Notes".toLowerCase()}
+            label="Notes"
+            value={localEntry.notes}
+            size="small"
+            onChange={onChange}
+            multiline
+            rows={4}
+            helperText={`${localEntry.notes?.length}/400`}
+          />
+        </>
         <LoadingButton onClick={saveHandler} variant="contained">
-          Save
+          {mode === "create" ? "Save" : "Update"}
         </LoadingButton>
       </Stack>
     </Dialog>

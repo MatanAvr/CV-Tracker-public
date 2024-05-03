@@ -1,9 +1,8 @@
-import { Toolbar, IconButton, Box, Typography, styled } from "@mui/material";
+import { Toolbar, Box, Typography, styled } from "@mui/material";
 import logoIcon from "../Assets/CV-tracker-logo.png";
-// import MenuIcon from "@mui/icons-material/Menu";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { DRAWER_WIDTH, APP_NAME } from "../Consts/Const";
-import SettingsIcon from "@mui/icons-material/Settings";
+// import SettingsIcon from "@mui/icons-material/Settings";
+import { APP_NAME, DRAWER_WIDTH, HEADER_HEIGHT } from "../Consts/ui";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -32,13 +31,20 @@ interface HeaderProps {
 }
 export default function Header({ open, toggleDrawer }: HeaderProps) {
   return (
-    <AppBar position="absolute" open={open}>
+    <AppBar
+      position="absolute"
+      open={open}
+      sx={{
+        height: HEADER_HEIGHT,
+        maxHeight: HEADER_HEIGHT,
+      }}
+    >
       <Toolbar
         sx={{
           pr: "16px", // keep right padding when drawer closed
         }}
       >
-        <IconButton
+        {/* <IconButton
           edge="start"
           color="inherit"
           aria-label="open drawer"
@@ -49,7 +55,7 @@ export default function Header({ open, toggleDrawer }: HeaderProps) {
           }}
         >
           <SettingsIcon />
-        </IconButton>
+        </IconButton> */}
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <img src={logoIcon} height={35} width={35} alt="logo" />
         </Box>

@@ -1,8 +1,14 @@
-import { EntryType, UserType } from "../Types/Types";
-
-export const DRAWER_WIDTH: number = 200;
+import {
+  EntryType,
+  NewEntryConfigType,
+  SystemConfigType,
+  UserLinksType,
+  UserType,
+} from "../Types/Types";
 
 export const LOCAL_STORAGE_DATA_KEY = "data";
+export const ENTRY_PREFIX = "EN-";
+export const USER_PREFIX = "US-";
 
 export const tableColumns = [
   "Date",
@@ -13,40 +19,14 @@ export const tableColumns = [
   "Notes",
 ];
 
-export const defaultEntry: EntryType = {
-  id: "",
-  date: "",
-  company: "",
-  role: "",
-  link: "",
-  status: "",
-  notes: "",
-};
-
-export const APP_NAME = "CV-Tracker-public";
-
-export const defaultUserLinks = {
+export const emptyUserLinks: UserLinksType = {
+  email: "",
   linkedinLink: "",
   githubLink: "",
   personalWebsiteLink: "",
 };
 
-export const SNACKBAR_TIMEOUT = 5000;
-
-export const ENTRY_PREFIX = "EN-";
-
-export const USER_PREFIX = "US-";
-
-export const defaultUser: UserType = {
-  id: "us-151654646",
-  firstName: "Matan",
-  lastName: "Avraham",
-  linkedinLink: "https://www.linkedin.com/in/matan-avraham-il/",
-  githubLink: "https://github.com/MatanAvr",
-  personalWebsiteLink: "",
-};
-
-export const TEST_DATA: EntryType[] = [
+export const testEntries: EntryType[] = [
   {
     id: "en-pgEHWqoK8-h4h7VmZVbH3",
     date: "01/04/2024",
@@ -87,3 +67,46 @@ export const TEST_DATA: EntryType[] = [
       "molestias modi optio est saepe quae quidem quod qui? Id, porro nulla.",
   },
 ];
+
+export const testUser: UserType = {
+  id: "US-xLCydedMCk_bYreTCIQXI",
+  firstName: "Matan",
+  lastName: "Avraham",
+  email: "matan4900@gmail.com",
+  linkedinLink: "https://www.linkedin.com/in/matan-avraham-il/",
+  githubLink: "https://github.com/MatanAvr",
+  personalWebsiteLink: "https://www.matanavraham.com/",
+  entries: testEntries,
+};
+
+export const emptyUser: UserType = {
+  id: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  linkedinLink: "",
+  githubLink: "",
+  personalWebsiteLink: "",
+  entries: [],
+};
+
+export const emptyEntry: EntryType = {
+  id: "",
+  date: "",
+  company: "",
+  role: "",
+  link: "",
+  status: "",
+  notes: "",
+};
+
+export const systemConfig: SystemConfigType = {
+  theme: "light",
+  todayAsDefault: true,
+  deafaultStatus: "Sent CV",
+};
+
+export const newEntryConfig: NewEntryConfigType = {
+  todayAsDefault: systemConfig.todayAsDefault,
+  deafaultStatus: systemConfig.deafaultStatus,
+};

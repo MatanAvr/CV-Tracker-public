@@ -1,16 +1,16 @@
 import { Dialog, Stack, TextField } from "@mui/material";
 import { useState } from "react";
-import { defaultUserLinks } from "../Consts/Const";
-import { userLinks } from "../Types/Types";
+import { emptyUserLinks } from "../Consts/Const";
+import { UserLinksType } from "../Types/Types";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { deepEqual } from "../Utils/Utils";
 
-interface UserLinksModalProps {
+type UserLinksModalProps = {
   open: boolean;
   closeModal: () => void;
-  onSave: (userLinks: userLinks) => void;
-  userLinks: userLinks;
-}
+  onSave: (userLinks: UserLinksType) => void;
+  userLinks: UserLinksType;
+};
 
 export default function UserLinksModal({
   closeModal,
@@ -18,8 +18,8 @@ export default function UserLinksModal({
   onSave,
   userLinks,
 }: UserLinksModalProps) {
-  const [localUserLinks, setLocalUserLinks] = useState<userLinks>(
-    userLinks || defaultUserLinks
+  const [localUserLinks, setLocalUserLinks] = useState<UserLinksType>(
+    userLinks || emptyUserLinks
   );
   const [isChanged, setIsChanged] = useState<boolean>(false);
 
@@ -46,7 +46,15 @@ export default function UserLinksModal({
 
   return (
     <Dialog id="user-links-dialog" onClose={closeModal} open={open}>
-      <Stack key={"dialog-box"} gap={2} sx={{ p: 3 }}>
+      <Stack key={"dialog-box"} gap={2} sx={{ p: 2 }}>
+        <TextField
+          id={"email"}
+          label="Email address"
+          value={localUserLinks.email}
+          size="small"
+          onChange={onChange}
+        />
+
         <TextField
           id={"linkedinLink"}
           label="Linkedin profile link"

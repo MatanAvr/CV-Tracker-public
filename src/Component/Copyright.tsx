@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { APP_NAME } from "../Consts/Const";
+import { APP_NAME } from "../Consts/ui";
 
 export const Copyright = () => {
   return (

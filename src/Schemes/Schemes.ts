@@ -1,40 +1,38 @@
 import { z } from "zod";
-import { EntryType, UserType } from "../Types/Types";
 
-export const zodStatusType = z.enum([
+export const Status = z.enum([
   "",
   "Sent CV",
   "Waiting for response",
   "HR call",
+  "Interview",
   "Not relevant",
 ]);
-
-const entryScheme = z.object({
+const optionalUrl = z.union([z.string().url().nullish(), z.literal("")]);
+export const Entry = z.object({
+  id: z.string().min(1).max(30),
   date: z.string().min(1).max(18),
   company: z.string().min(1).max(18),
   role: z.string().min(1).max(18),
-  link: z.string().url(),
-  status: zodStatusType,
-  notes: z.string().min(0).max(400),
+  link: optionalUrl,
+  status: Status,
+  notes: z.string().min(0).max(400).optional(),
 });
 
-export const zodEntryValidator = (entry: EntryType) => {
-  const isValidEntry = entryScheme.parse(entry);
-  return isValidEntry;
-};
-
-const userScheme = z.object({
+export const User = z.object({
   id: z.string().min(1).max(18),
-  email: z.string().email(),
-  password: z.string().min(4),
   firstName: z.string().min(1).max(18),
-  LastName: z.string().min(1).max(18),
+  lastName: z.string().min(1).max(18),
+  email: z.string().email(),
   linkedinLink: z.string().url(),
   githubLink: z.string().url(),
   personalWebsiteLink: z.string().url(),
+  entries: Entry.array(),
 });
 
-export const zodeUserValidator = (user: UserType) => {
-  const isValid = userScheme.parse(user);
-  return isValid;
-};
+export const UserLinks = User.pick({
+  email: true,
+  linkedinLink: true,
+  githubLink: true,
+  personalWebsiteLink: true,
+});

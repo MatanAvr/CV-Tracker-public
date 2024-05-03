@@ -1,9 +1,5 @@
-import { Dashboard } from "./Component/Dashboard";
+import { Home } from "./Pages/Home";
 
 export const App = () => {
-  return (
-    <>
-      <Dashboard />
-    </>
-  );
+  return <Home />;
 };

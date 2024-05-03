@@ -9,7 +9,7 @@ import { TableDataProps } from "../Types/Types";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 
-type mainTableProp = {
+type MainTableProp = {
   data: TableDataProps;
   deleteHandler: (idToDelete: string) => void;
   editHandler: (idToEdit: string) => void;
@@ -19,7 +19,7 @@ export default function MainTable({
   data,
   deleteHandler,
   editHandler,
-}: mainTableProp) {
+}: MainTableProp) {
   const actionsButtons = [
     {
       icon: <EditRoundedIcon color="primary" fontSize="small" />,
@@ -30,6 +30,7 @@ export default function MainTable({
       function: (id: string) => deleteHandler(id),
     },
   ];
+
   return (
     <Grid item xs={12}>
       <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
@@ -53,10 +54,10 @@ export default function MainTable({
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={`row-${index}`}>
-                <TableCell sx={{ width: 120 }}>{row.date}</TableCell>
-                <TableCell sx={{ width: 120 }}>{row.company}</TableCell>
-                <TableCell sx={{ width: 120 }}>{row.role}</TableCell>
-                <TableCell sx={{ width: 80 }}>
+                <TableCell width={120}>{row.date}</TableCell>
+                <TableCell width={120}>{row.company}</TableCell>
+                <TableCell width={120}>{row.role}</TableCell>
+                <TableCell width={120}>
                   {row.link ? (
                     <Link href={row.link} target="_blank" variant="body2">
                       Link
@@ -65,9 +66,9 @@ export default function MainTable({
                     <></>
                   )}
                 </TableCell>
-                <TableCell sx={{ width: 180 }}>{row.status}</TableCell>
+                <TableCell width={180}>{row.status}</TableCell>
                 <TableCell>{row.notes}</TableCell>
-                <TableCell>
+                <TableCell width={60}>
                   <Box key={`actions-box-${index}`} display={"flex"}>
                     {actionsButtons.map((action, index) => {
                       return (

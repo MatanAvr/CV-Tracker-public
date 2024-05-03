@@ -1,11 +1,12 @@
 import MuiDrawer from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
-import { DRAWER_WIDTH } from "../Consts/Const";
+import { DRAWER_WIDTH } from "../Consts/ui";
 
 export const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   "& .MuiDrawer-paper": {
+    overflow: "hidden",
     position: "relative",
     whiteSpace: "nowrap",
     width: DRAWER_WIDTH,
@@ -15,7 +16,7 @@ export const Drawer = styled(MuiDrawer, {
     }),
     boxSizing: "border-box",
     ...(!open && {
-      overflowX: "hidden",
+      overflow: "hidden",
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,

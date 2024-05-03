@@ -17,7 +17,6 @@ import {
 import { useMemo, useState } from "react";
 import { Button, Fab, Tooltip, Typography } from "@mui/material";
 import { Copyright } from "./Copyright";
-import UserLinksModal from "./UserLinksModal";
 import { UserLinks } from "./UserLinks";
 import {
   deleteFromLocalStorage,
@@ -27,6 +26,7 @@ import {
 import SnackBarHandler from "./SnackBarHandler";
 import { EntryFormModal } from "./Forms/EntryFormModal";
 import { isValidEntry, isValidUser } from "../Schemas/schemeValidators";
+import { UserLinksFormModal } from "./Forms/UserLinksFormModal";
 
 type DashboardProps = {
   user: UserType;
@@ -161,7 +161,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
 
   return (
     <>
-      {true && (
+      {/* {false && (
         <Box>
           <Button
             onClick={() => deleteFromLocalStorage(LOCAL_STORAGE_DATA_KEY)}
@@ -199,7 +199,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
             Validate entries
           </Button>
         </Box>
-      )}
+      )} */}
       <Container
         maxWidth="xl"
         sx={{
@@ -270,8 +270,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
         />
       )}
       {userLinksToEdit && (
-        <UserLinksModal
-          open={userLinksToEdit ? true : false}
+        <UserLinksFormModal
           closeModal={() => setUserLinksToEdit(undefined)}
           onSave={saveUserLinksHandler}
           userLinks={userLinksToEdit}

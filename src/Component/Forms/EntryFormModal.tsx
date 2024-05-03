@@ -78,6 +78,7 @@ export const EntryFormModal = ({
               required
               placeholder="DD/MM/YYYY"
             />
+
             <TextField
               size="small"
               label={capitalize("company")}
@@ -87,6 +88,7 @@ export const EntryFormModal = ({
               helperText={errors.company?.message}
               required
             />
+
             <TextField
               size="small"
               label={capitalize("role")}
@@ -96,6 +98,7 @@ export const EntryFormModal = ({
               helperText={errors.role?.message}
               required
             />
+
             <TextField
               size="small"
               label={capitalize("link")}
@@ -104,6 +107,7 @@ export const EntryFormModal = ({
               error={!!errors.link}
               helperText={errors.link?.message}
             />
+
             <TextField
               size="small"
               label={capitalize("status")}
@@ -133,20 +137,3 @@ export const EntryFormModal = ({
     </Dialog>
   );
 };
-
-// {Object.keys(emptyEntry).map((ObjKey, index) => {
-//     const keyWithType = ObjKey as keyof EntryType;
-//     return (
-//       <TextField
-//         size="small"
-//         key={`form-input-${index}`}
-//         label={capitalize(keyWithType)}
-//         type="text"
-//         {...register(keyWithType, {
-//           required: `${keyWithType} is required`,
-//         })}
-//         error={!!errors[keyWithType]}
-//         helperText={errors[keyWithType]?.message}
-//       />
-//     );
-//   })}

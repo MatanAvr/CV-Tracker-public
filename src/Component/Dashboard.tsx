@@ -161,45 +161,6 @@ export const Dashboard = ({ user }: DashboardProps) => {
 
   return (
     <>
-      {/* {false && (
-        <Box>
-          <Button
-            onClick={() => deleteFromLocalStorage(LOCAL_STORAGE_DATA_KEY)}
-          >
-            delete
-          </Button>
-          <Button
-            onClick={() => saveInLocalStorage(LOCAL_STORAGE_DATA_KEY, testUser)}
-          >
-            test user save
-          </Button>
-          <Button
-            onClick={() => {
-              const tempUser = loadFromLocalStorage(LOCAL_STORAGE_DATA_KEY);
-              setCurrentUser(tempUser);
-            }}
-          >
-            Load from local storage
-          </Button>
-          <Button onClick={() => saveUserToLocalStorage(currentUser)}>
-            Save
-          </Button>
-          <Button onClick={() => console.log(currentUser)}>Print user</Button>
-          <Button onClick={() => isValidUser(currentUser)}>
-            Validate user
-          </Button>
-          <Button onClick={() => console.log(currentUser.entries)}>
-            Print user entries
-          </Button>
-          <Button
-            onClick={() => {
-              currentUser.entries.forEach((entry) => isValidEntry(entry));
-            }}
-          >
-            Validate entries
-          </Button>
-        </Box>
-      )} */}
       <Container
         maxWidth="xl"
         sx={{

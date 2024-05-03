@@ -6,7 +6,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import cloneDeep from "lodash.clonedeep";
 
-import { LOCAL_STORAGE_DATA_KEY, emptyEntry, testUser } from "../Consts/Const";
+import { LOCAL_STORAGE_DATA_KEY, emptyEntry } from "../Consts/Const";
 import MainTable from "./MainTable";
 import {
   SnackBarColorsType,
@@ -15,17 +15,13 @@ import {
   EntryType,
 } from "../Types/Types";
 import { useMemo, useState } from "react";
-import { Button, Fab, Tooltip, Typography } from "@mui/material";
+import { Fab, Tooltip, Typography } from "@mui/material";
 import { Copyright } from "./Copyright";
 import { UserLinks } from "./UserLinks";
-import {
-  deleteFromLocalStorage,
-  loadFromLocalStorage,
-  saveInLocalStorage,
-} from "../Utils/Utils";
+import { saveInLocalStorage } from "../Utils/Utils";
 import SnackBarHandler from "./SnackBarHandler";
 import { EntryFormModal } from "./Forms/EntryFormModal";
-import { isValidEntry, isValidUser } from "../Schemas/schemeValidators";
+import { isValidUser } from "../Schemas/schemeValidators";
 import { UserLinksFormModal } from "./Forms/UserLinksFormModal";
 
 type DashboardProps = {

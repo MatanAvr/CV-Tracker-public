@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { TextField, Stack, capitalize, Dialog } from "@mui/material";
 import { UserLinksType } from "../../Types/Types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EntrySchema, UserLinksSchema } from "../../Schemas/Schemas";
+import { UserLinksSchema } from "../../Schemas/Schemas";
 import { LoadingButton } from "@mui/lab";
 import { deepEqual } from "../../Utils/Utils";
 

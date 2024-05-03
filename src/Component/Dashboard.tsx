@@ -20,25 +20,18 @@ import {
   EntryType,
 } from "../Types/Types";
 import { useEffect, useMemo, useState } from "react";
-import {
-  Alert,
-  Button,
-  Fab,
-  Snackbar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Button, Fab, Tooltip, Typography } from "@mui/material";
 // import LoadingSpinner from "./LoadingSpinner";
 import { Copyright } from "./Copyright";
 import EntryModal from "./EntryModal";
 import UserLinksModal from "./UserLinksModal";
 import { UserLinks } from "./UserLinks";
-import { SNACKBAR_TIMEOUT } from "../Consts/ui";
 import {
   deleteFromLocalStorage,
   loadFromLocalStorage,
   saveInLocalStorage,
 } from "../Utils/Utils";
+import SnackBarHandler from "./SnackBarHandler";
 
 type DashboardProps = {
   user: UserType;
@@ -65,6 +58,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
     currentUser.githubLink,
     currentUser.personalWebsiteLink,
   ]);
+
   useEffect(() => {
     setEntries(currentUser.entries);
   }, [currentUser.id]);
@@ -74,25 +68,16 @@ export const Dashboard = ({ user }: DashboardProps) => {
   const [snackBarColor, setSnackBarColor] =
     useState<SnackBarColorsType>("info");
 
-  const deleteEntryByIdHandler = async (idToDelete: string) => {
-    if (!entries) {
-      console.error("[deleteEntryByIdHandler] There is no data");
-      return;
-    }
-    const clonedEntries = cloneDeep(entries);
-    const filteredEntries = clonedEntries.filter(
-      (entry) => entry.id !== idToDelete
-    );
-    setEntries(() => filteredEntries);
-    openSnackBar("Entry deleted successfully", "success");
+  const saveUserLinksHandler = async (newUserLinks: UserLinksType) => {
+    if (!currentUser) return;
+    const newUserLinksClone = cloneDeep(newUserLinks);
+    const updatedUser = { ...currentUser, ...newUserLinksClone };
+    setCurrentUser(() => updatedUser);
+    openSnackBar("Links saved successfully", "success");
   };
 
-  const saveNewEntryHandler = async (newEntry: EntryType) => {
+  const createEntryHandler = (newEntry: EntryType) => {
     if (!currentUser) return;
-    if (newEntry.id) {
-      updateEntryHandler(newEntry);
-      return;
-    }
     const newEntryClone = cloneDeep(newEntry);
     if (!newEntryClone.date) {
       newEntryClone.date = new Date().toLocaleDateString();
@@ -102,27 +87,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
     openSnackBar("Entry saved successfully", "success");
   };
 
-  const saveUserLinksHandler = async (newUserLinks: UserLinksType) => {
-    if (!currentUser) return;
-    const newUserLinksClone = cloneDeep(newUserLinks);
-    const updatedUser = { ...currentUser, ...newUserLinksClone };
-    setCurrentUser(() => updatedUser);
-    openSnackBar("Links saved successfully", "success");
-  };
-
-  const editEntryByIdHandler = (idToEdit: string) => {
-    const dataClone = cloneDeep(entries);
-    const relevantEntry = dataClone.find((entry) => entry.id === idToEdit);
-    if (relevantEntry) {
-      setEntryToEdit(relevantEntry);
-    } else {
-      console.error(
-        `[editEntryByIdHandler] relevantEntry id ${idToEdit} does not exists`
-      );
-    }
-  };
-
-  const updateEntryHandler = async (entryToUpdate: EntryType) => {
+  const updateEntryHandler = (entryToUpdate: EntryType) => {
     const entriesClone = cloneDeep(entries);
     const relevantEntryIndex = entriesClone.findIndex(
       (el) => el.id === entryToUpdate.id
@@ -138,29 +103,46 @@ export const Dashboard = ({ user }: DashboardProps) => {
     }
   };
 
+  const deleteEntryByIdHandler = (idToDelete: string) => {
+    if (!entries) {
+      console.error("[deleteEntryByIdHandler] There is no data");
+      return;
+    }
+    const clonedEntries = cloneDeep(entries);
+    const filteredEntries = clonedEntries.filter(
+      (entry) => entry.id !== idToDelete
+    );
+    setEntries(() => filteredEntries);
+    openSnackBar("Entry deleted successfully", "success");
+  };
+
+  const editEntryByIdHandler = (idToEdit: string) => {
+    const dataClone = cloneDeep(entries);
+    const relevantEntry = dataClone.find((entry) => entry.id === idToEdit);
+    if (relevantEntry) {
+      setEntryToEdit(relevantEntry);
+    } else {
+      console.error(
+        `[editEntryByIdHandler] relevantEntry id ${idToEdit} does not exists`
+      );
+    }
+  };
+
   const openSnackBar = (
     message: string,
     color: SnackBarColorsType = "info"
   ) => {
-    setSnackBarColor(() => color);
+    setSnackBarColor(color);
     setSnackBarMessage(message);
-    setIsSnackBarOpen(() => true);
+    setIsSnackBarOpen(true);
   };
 
   const closeSnackBar = (_?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
-    setIsSnackBarOpen(() => false);
+    setIsSnackBarOpen(false);
     setSnackBarMessage("");
-  };
-
-  const closeEntryModalHandler = () => {
-    setEntryToEdit(undefined);
-  };
-
-  const closeUserLinksModalHandler = () => {
-    setUserLinksToEdit(undefined);
   };
 
   return (
@@ -173,10 +155,8 @@ export const Dashboard = ({ user }: DashboardProps) => {
           flexDirection: "column",
           gap: 1,
           overflow: "hidden",
-          border: "1px solid red",
         }}
       >
-        {/* {currentUser && <Typography>Hi {currentUser.firstName}!</Typography>} */}
         <Box display={"flex"} alignItems={"center"} gap={2}>
           <Tooltip title="Add new entry">
             <Fab
@@ -270,35 +250,27 @@ export const Dashboard = ({ user }: DashboardProps) => {
         <>{currentUser && currentUser.id}</>
       </Container>
       <Copyright />
-      {isSnackBarOpen && (
-        <Snackbar
-          open={isSnackBarOpen}
-          autoHideDuration={SNACKBAR_TIMEOUT}
-          onClose={closeSnackBar}
-        >
-          <Alert
-            onClose={closeSnackBar}
-            severity={snackBarColor}
-            sx={{ width: "100%" }}
-          >
-            {snackBarMessage}
-          </Alert>
-        </Snackbar>
-      )}
+      <SnackBarHandler
+        isSnackBarOpen={isSnackBarOpen}
+        closeSnackBar={closeSnackBar}
+        snackBarColor={snackBarColor}
+        snackBarMessage={snackBarMessage}
+      />
 
       {/* Modals */}
       {entryToEdit && (
         <EntryModal
           open={entryToEdit ? true : false}
-          closeModal={closeEntryModalHandler}
-          onSave={saveNewEntryHandler}
+          closeModal={() => setEntryToEdit(undefined)}
+          onCreate={createEntryHandler}
+          onUpdate={updateEntryHandler}
           entry={entryToEdit}
         />
       )}
       {userLinksToEdit && (
         <UserLinksModal
           open={userLinksToEdit ? true : false}
-          closeModal={closeUserLinksModalHandler}
+          closeModal={() => setUserLinksToEdit(undefined)}
           onSave={saveUserLinksHandler}
           userLinks={userLinksToEdit}
         />

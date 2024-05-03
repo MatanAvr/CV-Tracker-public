@@ -28,7 +28,7 @@ export const emptyUserLinks: UserLinksType = {
 
 export const testEntries: EntryType[] = [
   {
-    id: "en-pgEHWqoK8-h4h7VmZVbH3",
+    id: "EN-pgEHWqoK8-h4h7VmZVbH3",
     date: "01/04/2024",
     company: "Facebook",
     role: "Front-end",
@@ -37,7 +37,7 @@ export const testEntries: EntryType[] = [
     notes: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   },
   {
-    id: "en-nalBBCuMVhrNJIF08xVm2",
+    id: "EN-nalBBCuMVhrNJIF08xVm2",
     date: "05/04/2024",
     company: "Google",
     role: "Back-end",
@@ -47,7 +47,7 @@ export const testEntries: EntryType[] = [
       "In exercitationem voluptatem ullam blanditiis ipsa impedit nam, molestias modi optio est saepe quae quidem quod qui?",
   },
   {
-    id: "en-RcghHaLUfXSGS63Y_LsRF",
+    id: "EN-RcghHaLUfXSGS63Y_LsRF",
     date: "11/04/2024",
     company: "Amazon",
     role: "Fullstack",

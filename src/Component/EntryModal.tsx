@@ -22,21 +22,28 @@ import { generateIdWithPrefix } from "../Utils/generateIdWithPrefix";
 type EntryModalProps = {
   open: boolean;
   closeModal: () => void;
-  onSave: (entry: EntryType) => void;
+  onCreate: (entry: EntryType) => void;
+  onUpdate: (entryToUpdate: EntryType) => void;
   entry: EntryType;
 };
 
 export default function EntryModal({
-  closeModal,
   open,
-  onSave,
   entry,
+  onCreate,
+  onUpdate,
+  closeModal,
 }: EntryModalProps) {
   const [localEntry, setLocalEntry] = useState<EntryType>(entry);
   const [isChanged, setIsChanged] = useState<boolean>(false);
+  const [mode, setMode] = useState<"create" | "update">("create");
 
   useEffectOnce(() => {
-    if (localEntry.id) return;
+    // if entry have id - means 'update' mode
+    if (localEntry.id) {
+      setMode("update");
+      return;
+    }
     const newEntryClone = cloneDeep(emptyEntry);
     newEntryClone.id = generateIdWithPrefix(ENTRY_PREFIX);
     if (!localEntry.date && newEntryConfig.todayAsDefault) {
@@ -77,10 +84,16 @@ export default function EntryModal({
   const saveHandler = () => {
     // validate fields
     const isValid = isValidEntry(localEntry);
-    if (!isValid) return;
-    // check if fields changed
+    if (!isValid) {
+      //show errors
+      return;
+    }
     if (isChanged && !deepEqual(entry, localEntry)) {
-      onSave(localEntry);
+      if (mode === "create") {
+        onCreate(localEntry);
+      } else if (mode === "update") {
+        onUpdate(localEntry);
+      }
     }
     closeModal();
   };
@@ -88,6 +101,7 @@ export default function EntryModal({
   return (
     <Dialog id="entry-dialog" onClose={closeModal} open={open}>
       <Stack key={"dialog-box"} gap={2} sx={{ p: 2 }}>
+        {mode}
         <TextField
           id={"Date".toLowerCase()}
           label="Date"

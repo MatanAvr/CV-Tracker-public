@@ -1,4 +1,11 @@
-import { Toolbar, IconButton, Divider } from "@mui/material";
+import {
+  Toolbar,
+  IconButton,
+  Divider,
+  Alert,
+  Box,
+  Typography,
+} from "@mui/material";
 import { Drawer } from "./Drawer";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
@@ -21,6 +28,18 @@ const MyDrawer = ({ open, toggleDrawer }: MyDrawerProps) => {
       </Toolbar>
       <Divider />
       {/* <List component="nav">{mainListItems}</List> */}
+      <Alert severity="info">Coming soon!</Alert>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        mt="auto"
+        p={0.5}
+      >
+        <Divider flexItem />
+        <Typography variant="caption">Version: 0.0.1</Typography>
+      </Box>
     </Drawer>
   );
 };

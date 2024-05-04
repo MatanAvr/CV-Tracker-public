@@ -3,7 +3,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Box, Grid, IconButton, Link, Paper, Typography } from "@mui/material";
+import { Box, IconButton, Link, Paper, Typography } from "@mui/material";
 import { tableColumns } from "../Consts/Const";
 import { TableDataProps } from "../Types/Types";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";

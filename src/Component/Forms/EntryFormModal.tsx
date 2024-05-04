@@ -127,7 +127,7 @@ export const EntryFormModal = ({
             rows={4}
           />
 
-          <LoadingButton type="submit" variant="contained" color="primary">
+          <LoadingButton type="submit" variant="contained">
             {mode === "create" ? "Save" : "Update"}
           </LoadingButton>
         </Stack>

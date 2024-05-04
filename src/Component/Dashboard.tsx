@@ -22,6 +22,7 @@ import SnackBarHandler from "./SnackBarHandler";
 import { EntryFormModal } from "./Forms/EntryFormModal";
 import { isValidUser } from "../Schemas/schemeValidators";
 import { UserLinksFormModal } from "./Forms/UserLinksFormModal";
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 
 type DashboardProps = {
   user: UserType;
@@ -31,6 +32,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
   const [currentUser, setCurrentUser] = useState<UserType>(user);
   const [entryToEdit, setEntryToEdit] = useState<EntryType>();
   const [userLinksToEdit, setUserLinksToEdit] = useState<UserLinksType>();
+  const [idToDelete, setIdToDelete] = useState<string>("");
 
   const userLinks = useMemo(() => {
     if (!currentUser) return;
@@ -101,6 +103,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
   const deleteEntryByIdHandler = (idToDelete: string) => {
     if (!currentUser.entries) {
       console.error("[deleteEntryByIdHandler] There is no data");
+      setIdToDelete("");
       return;
     }
     const clonedEntries = cloneDeep(currentUser.entries);
@@ -109,6 +112,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
     );
     updateUserEntries(filteredEntries);
     openSnackBar("Entry deleted successfully", "success");
+    setIdToDelete("");
   };
 
   const editEntryByIdHandler = (idToEdit: string) => {
@@ -190,7 +194,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
           {currentUser.entries && currentUser.entries.length > 0 ? (
             <MainTable
               data={currentUser.entries}
-              deleteHandler={deleteEntryByIdHandler}
+              deleteHandler={setIdToDelete}
               editHandler={editEntryByIdHandler}
             />
           ) : (
@@ -222,6 +226,14 @@ export const Dashboard = ({ user }: DashboardProps) => {
           closeModal={() => setUserLinksToEdit(undefined)}
           onSave={saveUserLinksHandler}
           userLinks={userLinksToEdit}
+        />
+      )}
+      {idToDelete && (
+        <ConfirmDeleteModal
+          closeModal={() => setIdToDelete("")}
+          onConfirm={() => {
+            deleteEntryByIdHandler(idToDelete);
+          }}
         />
       )}
     </>

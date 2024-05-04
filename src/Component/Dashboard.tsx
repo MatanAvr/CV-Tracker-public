@@ -5,7 +5,6 @@ import Grid from "@mui/material/Grid";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import cloneDeep from "lodash.clonedeep";
-
 import { LOCAL_STORAGE_DATA_KEY, emptyEntry } from "../Consts/Const";
 import MainTable from "./MainTable";
 import {
@@ -78,7 +77,6 @@ export const Dashboard = ({ user }: DashboardProps) => {
       newEntryClone.date = new Date().toLocaleDateString();
     }
 
-    // setEntries((entries) => [...entries, newEntryClone]);
     updateUserEntries([...currentUser.entries, newEntryClone]);
     openSnackBar("Entry saved successfully", "success");
   };
@@ -90,7 +88,6 @@ export const Dashboard = ({ user }: DashboardProps) => {
     );
     if (relevantEntryIndex !== -1) {
       entriesClone[relevantEntryIndex] = entryToUpdate;
-      // setEntries(() => [...entriesClone]);
       updateUserEntries([...entriesClone]);
 
       openSnackBar("Entry updated successfully", "success");
@@ -110,7 +107,6 @@ export const Dashboard = ({ user }: DashboardProps) => {
     const filteredEntries = clonedEntries.filter(
       (entry) => entry.id !== idToDelete
     );
-    // setEntries(() => filteredEntries);
     updateUserEntries(filteredEntries);
     openSnackBar("Entry deleted successfully", "success");
   };
@@ -148,7 +144,6 @@ export const Dashboard = ({ user }: DashboardProps) => {
     const userClone = cloneDeep(updatedUser);
     const validUser = isValidUser(userClone);
     if (validUser) {
-      console.log(userClone);
       saveInLocalStorage(LOCAL_STORAGE_DATA_KEY, userClone);
     } else {
       openSnackBar("Save error", "error");
@@ -191,11 +186,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
             </IconButton>
           </Tooltip>
         </Box>
-        <Grid
-          container
-          // spacing={1}
-          overflow={"auto"}
-        >
+        <Grid container overflow={"auto"}>
           {currentUser.entries && currentUser.entries.length > 0 ? (
             <MainTable
               data={currentUser.entries}

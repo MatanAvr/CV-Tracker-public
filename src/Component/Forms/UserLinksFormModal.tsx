@@ -35,54 +35,57 @@ export const UserLinksFormModal = ({
     closeModal();
   };
 
+  const fieldsArr: {
+    name: string;
+    key: "email" | "linkedinLink" | "githubLink" | "personalWebsiteLink";
+    placeholder: string;
+  }[] = [
+    {
+      name: "Email",
+      key: "email",
+      placeholder: "example@gmail.com",
+    },
+    {
+      name: "Linkedin link",
+      key: "linkedinLink",
+      placeholder: "http://www.linkedin.com/example",
+    },
+    {
+      name: "GitHub link",
+      key: "githubLink",
+      placeholder: "http://www.github.com/example",
+    },
+    {
+      name: "Website Link",
+      key: "personalWebsiteLink",
+      placeholder: "http://www.example.com",
+    },
+  ];
+
   return (
     <Dialog id="user-links-dialog" onClose={closeModal} open={true}>
-      <Stack key={"dialog-box"} gap={2} sx={{ p: 2 }}>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <Stack gap={2} sx={{ p: 2 }} width={300}>
-            <TextField
-              size="small"
-              label={capitalize("email")}
-              type="text"
-              {...register("email")}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              placeholder="example@gmail.com"
-            />
-            <TextField
-              size="small"
-              label={capitalize("Linkedin link")}
-              type="text"
-              {...register("linkedinLink")}
-              error={!!errors.linkedinLink}
-              helperText={errors.linkedinLink?.message}
-              placeholder="http://www.linkedin.com/example"
-            />
-            <TextField
-              size="small"
-              label={capitalize("GitHub link")}
-              type="text"
-              {...register("githubLink")}
-              error={!!errors.githubLink}
-              helperText={errors.githubLink?.message}
-              placeholder="http://www.github.com/example"
-            />
-            <TextField
-              size="small"
-              label={capitalize("Website Link")}
-              type="text"
-              {...register("personalWebsiteLink")}
-              error={!!errors.personalWebsiteLink}
-              helperText={errors.personalWebsiteLink?.message}
-              placeholder="http://www.example.com"
-            />
-
-            <LoadingButton type="submit" variant="contained" color="primary">
-              Save
-            </LoadingButton>
-          </Stack>
-        </form>
-      </Stack>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Stack gap={2} sx={{ p: 2 }}>
+          {fieldsArr.map((field, index) => {
+            const { key, name, placeholder } = field;
+            return (
+              <TextField
+                key={`field-${index}`}
+                size="small"
+                label={capitalize(name)}
+                type="text"
+                {...register(key)}
+                error={!!errors[key]}
+                helperText={errors[key]?.message}
+                placeholder={placeholder}
+              />
+            );
+          })}
+          <LoadingButton type="submit" variant="contained" color="primary">
+            Save
+          </LoadingButton>
+        </Stack>
+      </form>
     </Dialog>
   );
 };

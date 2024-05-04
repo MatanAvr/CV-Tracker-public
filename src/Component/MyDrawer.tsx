@@ -27,7 +27,6 @@ const MyDrawer = ({ open, toggleDrawer }: MyDrawerProps) => {
         </IconButton>
       </Toolbar>
       <Divider />
-      {/* <List component="nav">{mainListItems}</List> */}
       <Alert severity="info">Coming soon!</Alert>
       <Box
         display={"flex"}
@@ -38,7 +37,7 @@ const MyDrawer = ({ open, toggleDrawer }: MyDrawerProps) => {
         p={0.5}
       >
         <Divider flexItem />
-        <Typography variant="caption">Version: 0.0.1</Typography>
+        <Typography variant="caption">Version: 0.0.2</Typography>
       </Box>
     </Drawer>
   );

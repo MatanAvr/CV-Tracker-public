@@ -81,7 +81,7 @@ export const UserLinksFormModal = ({
               />
             );
           })}
-          <LoadingButton type="submit" variant="contained" color="primary">
+          <LoadingButton type="submit" variant="contained">
             Save
           </LoadingButton>
         </Stack>

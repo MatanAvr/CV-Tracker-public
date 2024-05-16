@@ -1,42 +1,42 @@
 import { useForm } from "react-hook-form";
 import { TextField, Stack, capitalize, Dialog } from "@mui/material";
-import { EntryType } from "../../Types/Types";
-import { ENTRY_PREFIX, emptyEntry } from "../../Consts/Const";
+import { ApplicationType } from "../../Types/Types";
+import { APPLICATION_PREFIX, emptyApplication } from "../../Consts/Const";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EntrySchema } from "../../Schemas/Schemas";
+import { ApplicationSchema } from "../../Schemas/Schemas";
 import { LoadingButton } from "@mui/lab";
 import { generateIdWithPrefix } from "../../Utils/generateIdWithPrefix";
 import { useEffectOnce } from "../../hooks/useEffectOnce";
 import { useState } from "react";
 import { deepEqual } from "../../Utils/Utils";
 
-type EntryFormModalProps = {
+type ApplicationFormModalProps = {
   closeModal: () => void;
-  onCreate: (entry: EntryType) => void;
-  onUpdate: (entryToUpdate: EntryType) => void;
-  entry: EntryType;
+  onCreate: (application: ApplicationType) => void;
+  onUpdate: (applicationToUpdate: ApplicationType) => void;
+  application: ApplicationType;
 };
 
-export const EntryFormModal = ({
-  entry,
+export const ApplicationFormModal = ({
+  application,
   onCreate,
   onUpdate,
   closeModal,
-}: EntryFormModalProps) => {
+}: ApplicationFormModalProps) => {
   const [mode, setMode] = useState<"create" | "update">("create");
 
   useEffectOnce(() => {
-    // if entry have id - means 'update' mode
-    if (entry.id) {
+    // if application have id - means 'update' mode
+    if (application.id) {
       setMode("update");
     }
   }, []);
 
-  const localEntry: EntryType = entry.id
-    ? entry
+  const localApplication: ApplicationType = application.id
+    ? application
     : {
-        ...emptyEntry,
-        id: generateIdWithPrefix(ENTRY_PREFIX),
+        ...emptyApplication,
+        id: generateIdWithPrefix(APPLICATION_PREFIX),
         date: new Date().toLocaleDateString(),
         status: "Sent CV",
       };
@@ -45,26 +45,26 @@ export const EntryFormModal = ({
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<EntryType>({
+  } = useForm<ApplicationType>({
     defaultValues: {
-      ...localEntry,
+      ...localApplication,
     },
-    resolver: zodResolver(EntrySchema),
+    resolver: zodResolver(ApplicationSchema),
   });
 
-  const onSubmit = (localEntry: EntryType) => {
-    if (!deepEqual(entry, localEntry)) {
+  const onSubmit = (localApplication: ApplicationType) => {
+    if (!deepEqual(application, localApplication)) {
       if (mode === "create") {
-        onCreate(localEntry);
+        onCreate(localApplication);
       } else if (mode === "update") {
-        onUpdate(localEntry);
+        onUpdate(localApplication);
       }
     }
     closeModal();
   };
 
   return (
-    <Dialog id="entry-dialog" onClose={closeModal} open={true}>
+    <Dialog id="application-dialog" onClose={closeModal} open={true}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2} sx={{ p: 2 }}>
           <TextField

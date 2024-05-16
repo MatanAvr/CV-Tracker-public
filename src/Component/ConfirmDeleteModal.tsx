@@ -13,7 +13,9 @@ export const ConfirmDeleteModal = ({
     <Dialog id="confirm-delete-dialog" onClose={closeModal} open={true}>
       <Stack p={2} gap={1.5} textAlign={"center"}>
         <Typography variant="h6">Confirm deletion</Typography>
-        <Typography>Are you sure you want to delete the entry?</Typography>
+        <Typography>
+          Are you sure you want to delete the application?
+        </Typography>
         <Typography variant="body2">
           You won't be able to revert this!
         </Typography>

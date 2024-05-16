@@ -1,13 +1,13 @@
 import { z } from "zod";
 import {
-  EntrySchema,
+  ApplicationSchema,
   StatusEnum,
   UserSchema,
   UserLinksSchema,
 } from "../Schemas/Schemas";
 
 export type StatusType = z.infer<typeof StatusEnum>;
-export type EntryType = z.infer<typeof EntrySchema>;
+export type ApplicationType = z.infer<typeof ApplicationSchema>;
 export type UserType = z.infer<typeof UserSchema>;
 export type UserLinksType = z.infer<typeof UserLinksSchema>;
 
@@ -18,7 +18,7 @@ export const statusArr: StatusType[] = [
   "Not relevant",
 ] as const;
 
-export type TableDataProps = EntryType[];
+export type TableDataProps = ApplicationType[];
 export type SnackBarColorsType = "success" | "info" | "warning" | "error";
 
 export type SystemConfigType = {
@@ -27,7 +27,7 @@ export type SystemConfigType = {
   deafaultStatus: StatusType;
 };
 
-export type NewEntryConfigType = Pick<
+export type NewApplicationConfigType = Pick<
   SystemConfigType,
   "todayAsDefault" | "deafaultStatus"
 >;

@@ -1,13 +1,13 @@
 import {
-  EntryType,
-  NewEntryConfigType,
+  ApplicationType,
+  NewApplicationConfigType,
   SystemConfigType,
   UserLinksType,
   UserType,
 } from "../Types/Types";
 
 export const LOCAL_STORAGE_DATA_KEY = "data";
-export const ENTRY_PREFIX = "EN-";
+export const APPLICATION_PREFIX = "AP-";
 export const USER_PREFIX = "US-";
 
 export const tableColumns = [
@@ -26,7 +26,7 @@ export const emptyUserLinks: UserLinksType = {
   personalWebsiteLink: "",
 };
 
-export const testEntries: EntryType[] = [
+export const testEntries: ApplicationType[] = [
   {
     id: "EN-pgEHWqoK8-h4h7VmZVbH3",
     date: "01/04/2024",
@@ -90,7 +90,7 @@ export const emptyUser: UserType = {
   entries: [],
 };
 
-export const emptyEntry: EntryType = {
+export const emptyApplication: ApplicationType = {
   id: "",
   date: "",
   company: "",
@@ -106,7 +106,7 @@ export const systemConfig: SystemConfigType = {
   deafaultStatus: "Sent CV",
 };
 
-export const newEntryConfig: NewEntryConfigType = {
+export const newApplicationConfig: NewApplicationConfigType = {
   todayAsDefault: systemConfig.todayAsDefault,
   deafaultStatus: systemConfig.deafaultStatus,
 };

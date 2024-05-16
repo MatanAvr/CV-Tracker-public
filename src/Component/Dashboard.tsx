@@ -5,13 +5,13 @@ import Grid from "@mui/material/Grid";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import cloneDeep from "lodash.clonedeep";
-import { LOCAL_STORAGE_DATA_KEY, emptyEntry } from "../Consts/Const";
+import { LOCAL_STORAGE_DATA_KEY, emptyApplication } from "../Consts/Const";
 import MainTable from "./MainTable";
 import {
   SnackBarColorsType,
   UserLinksType,
   UserType,
-  EntryType,
+  ApplicationType,
 } from "../Types/Types";
 import { useMemo, useState } from "react";
 import { Fab, Tooltip, Typography } from "@mui/material";
@@ -19,10 +19,11 @@ import { Copyright } from "./Copyright";
 import { UserLinks } from "./UserLinks";
 import { saveInLocalStorage } from "../Utils/Utils";
 import SnackBarHandler from "./SnackBarHandler";
-import { EntryFormModal } from "./Forms/EntryFormModal";
+import { ApplicationFormModal } from "./Forms/ApplicationFormModal";
 import { isValidUser } from "../Schemas/schemeValidators";
 import { UserLinksFormModal } from "./Forms/UserLinksFormModal";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
+import SearchBar from "./SearchBar";
 
 type DashboardProps = {
   user: UserType;
@@ -30,7 +31,10 @@ type DashboardProps = {
 
 export const Dashboard = ({ user }: DashboardProps) => {
   const [currentUser, setCurrentUser] = useState<UserType>(user);
-  const [entryToEdit, setEntryToEdit] = useState<EntryType>();
+  const [filteredApplications, setFilteredApplications] = useState<
+    ApplicationType[] | undefined
+  >(undefined);
+  const [ApplicationToEdit, setApplicationToEdit] = useState<ApplicationType>();
   const [userLinksToEdit, setUserLinksToEdit] = useState<UserLinksType>();
   const [idToDelete, setIdToDelete] = useState<string>("");
 
@@ -63,7 +67,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
     saveUserToLocalStorage(updatedUser);
   };
 
-  const updateUserEntries = (newEntries: EntryType[]) => {
+  const updateUserEntries = (newEntries: ApplicationType[]) => {
     if (!currentUser) return;
     const newUserEntries = cloneDeep(newEntries);
     const updatedUser = { ...currentUser, entries: [...newUserEntries] };
@@ -72,57 +76,59 @@ export const Dashboard = ({ user }: DashboardProps) => {
     saveUserToLocalStorage(updatedUser);
   };
 
-  const createEntryHandler = (newEntry: EntryType) => {
+  const createApplicationHandler = (newApplication: ApplicationType) => {
     if (!currentUser) return;
-    const newEntryClone = cloneDeep(newEntry);
-    if (!newEntryClone.date) {
-      newEntryClone.date = new Date().toLocaleDateString();
+    const newApplicationClone = cloneDeep(newApplication);
+    if (!newApplicationClone.date) {
+      newApplicationClone.date = new Date().toLocaleDateString();
     }
 
-    updateUserEntries([...currentUser.entries, newEntryClone]);
-    openSnackBar("Entry saved successfully", "success");
+    updateUserEntries([...currentUser.entries, newApplicationClone]);
+    openSnackBar("Application saved successfully", "success");
   };
 
-  const updateEntryHandler = (entryToUpdate: EntryType) => {
+  const updateApplicationHandler = (applicationToUpdate: ApplicationType) => {
     const entriesClone = cloneDeep(currentUser.entries);
-    const relevantEntryIndex = entriesClone.findIndex(
-      (el) => el.id === entryToUpdate.id
+    const relevantApplicationIndex = entriesClone.findIndex(
+      (el) => el.id === applicationToUpdate.id
     );
-    if (relevantEntryIndex !== -1) {
-      entriesClone[relevantEntryIndex] = entryToUpdate;
+    if (relevantApplicationIndex !== -1) {
+      entriesClone[relevantApplicationIndex] = applicationToUpdate;
       updateUserEntries([...entriesClone]);
 
-      openSnackBar("Entry updated successfully", "success");
+      openSnackBar("Application updated successfully", "success");
     } else {
       console.error(
-        `[updateEntryHandler] Entry with id ${entryToUpdate.id} does not exists`
+        `[updateApplicationHandler] Application with id ${applicationToUpdate.id} does not exists`
       );
     }
   };
 
-  const deleteEntryByIdHandler = (idToDelete: string) => {
+  const deleteApplicationByIdHandler = (idToDelete: string) => {
     if (!currentUser.entries) {
-      console.error("[deleteEntryByIdHandler] There is no data");
+      console.error("[deleteApplicationByIdHandler] There is no data");
       setIdToDelete("");
       return;
     }
     const clonedEntries = cloneDeep(currentUser.entries);
     const filteredEntries = clonedEntries.filter(
-      (entry) => entry.id !== idToDelete
+      (application) => application.id !== idToDelete
     );
     updateUserEntries(filteredEntries);
-    openSnackBar("Entry deleted successfully", "success");
+    openSnackBar("Application deleted successfully", "success");
     setIdToDelete("");
   };
 
-  const editEntryByIdHandler = (idToEdit: string) => {
+  const editApplicationByIdHandler = (idToEdit: string) => {
     const dataClone = cloneDeep(currentUser.entries);
-    const relevantEntry = dataClone.find((entry) => entry.id === idToEdit);
-    if (relevantEntry) {
-      setEntryToEdit(relevantEntry);
+    const relevantApplication = dataClone.find(
+      (application) => application.id === idToEdit
+    );
+    if (relevantApplication) {
+      setApplicationToEdit(relevantApplication);
     } else {
       console.error(
-        `[editEntryByIdHandler] relevantEntry id ${idToEdit} does not exists`
+        `[editApplicationByIdHandler] relevantApplication id ${idToEdit} does not exists`
       );
     }
   };
@@ -166,40 +172,63 @@ export const Dashboard = ({ user }: DashboardProps) => {
           overflow: "hidden",
         }}
       >
-        <Box display={"flex"} alignItems={"center"} gap={2}>
-          <Tooltip title="Add new entry">
-            <Fab
-              color="primary"
-              aria-label="add"
-              size="small"
-              onClick={() => setEntryToEdit(emptyEntry)}
-            >
-              <AddRoundedIcon />
-            </Fab>
-          </Tooltip>
+        <Box
+          display={"flex"}
+          flexDirection={{ xs: "column", md: "row" }}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <Box
+            display={"flex"}
+            flex={1}
+            gap={2}
+            alignItems={"center"}
+            justifyContent={"flex-start"}
+          >
+            <Tooltip title="Add new application">
+              <Fab
+                color="primary"
+                aria-label="Add new application"
+                size="small"
+                onClick={() => setApplicationToEdit(emptyApplication)}
+              >
+                <AddRoundedIcon />
+              </Fab>
+            </Tooltip>
 
-          {currentUser && (
-            <UserLinks user={currentUser} openSnackBar={openSnackBar} />
-          )}
-          <Tooltip title="Edit links">
-            <IconButton
-              onClick={() => setUserLinksToEdit(userLinks)}
-              size="small"
-            >
-              <EditRoundedIcon color="primary" />
-            </IconButton>
-          </Tooltip>
+            {currentUser && (
+              <UserLinks user={currentUser} openSnackBar={openSnackBar} />
+            )}
+
+            <Tooltip title="Edit links">
+              <IconButton
+                onClick={() => setUserLinksToEdit(userLinks)}
+                size="small"
+              >
+                <EditRoundedIcon color="primary" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+
+          <Box display={"flex"} flex={1} justifyContent={"center"}>
+            <SearchBar
+              applications={currentUser.entries}
+              setFilteredApplications={setFilteredApplications}
+            />
+          </Box>
+
+          <Box display={"flex"} flex={1} />
         </Box>
         <Grid container overflow={"auto"}>
           {currentUser.entries && currentUser.entries.length > 0 ? (
             <MainTable
-              data={currentUser.entries}
+              data={filteredApplications || currentUser.entries}
               deleteHandler={setIdToDelete}
-              editHandler={editEntryByIdHandler}
+              editHandler={editApplicationByIdHandler}
             />
           ) : (
             <Box display={"flex"} flex={1} justifyContent={"center"}>
-              <Typography variant="h5">Add new entries!</Typography>
+              <Typography variant="h5">Add new applications!</Typography>
             </Box>
           )}
         </Grid>
@@ -213,12 +242,12 @@ export const Dashboard = ({ user }: DashboardProps) => {
       />
 
       {/* Modals */}
-      {entryToEdit && (
-        <EntryFormModal
-          closeModal={() => setEntryToEdit(undefined)}
-          onCreate={createEntryHandler}
-          onUpdate={updateEntryHandler}
-          entry={entryToEdit}
+      {ApplicationToEdit && (
+        <ApplicationFormModal
+          closeModal={() => setApplicationToEdit(undefined)}
+          onCreate={createApplicationHandler}
+          onUpdate={updateApplicationHandler}
+          application={ApplicationToEdit}
         />
       )}
       {userLinksToEdit && (
@@ -232,7 +261,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
         <ConfirmDeleteModal
           closeModal={() => setIdToDelete("")}
           onConfirm={() => {
-            deleteEntryByIdHandler(idToDelete);
+            deleteApplicationByIdHandler(idToDelete);
           }}
         />
       )}

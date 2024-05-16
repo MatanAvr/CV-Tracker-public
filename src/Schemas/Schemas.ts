@@ -12,7 +12,7 @@ export const StatusEnum = z.enum([
 const optionalUrl = z.union([z.string().url(), z.literal("")]);
 const optionalEmail = z.union([z.string().email(), z.literal("")]);
 
-export const EntrySchema = z.object({
+export const ApplicationSchema = z.object({
   id: z.string().min(1).max(30),
   date: z.string().min(1).max(30),
   company: z.string().min(1).max(30),
@@ -30,7 +30,7 @@ export const UserSchema = z.object({
   linkedinLink: optionalUrl,
   githubLink: optionalUrl,
   personalWebsiteLink: optionalUrl,
-  entries: EntrySchema.array(),
+  entries: ApplicationSchema.array(),
 });
 
 export const UserLinksSchema = UserSchema.pick({

@@ -37,7 +37,7 @@ const MyDrawer = ({ open, toggleDrawer }: MyDrawerProps) => {
         p={0.5}
       >
         <Divider flexItem />
-        <Typography variant="caption">Version: 0.0.4</Typography>
+        <Typography variant="caption">Version: 0.0.5</Typography>
       </Box>
     </Drawer>
   );

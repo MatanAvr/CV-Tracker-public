@@ -1,5 +1,5 @@
 import { Toolbar, Box, Typography, styled, IconButton } from "@mui/material";
-import logoIcon from "../Assets/CV-tracker-logo.webp";
+import logoIcon from "../Assets/images/CV-tracker-logo.webp";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { APP_NAME, DRAWER_WIDTH, HEADER_HEIGHT } from "../Consts/ui";
@@ -40,9 +40,11 @@ export default function Header({ open, toggleDrawer }: HeaderProps) {
       }}
     >
       <Toolbar
-        sx={{
-          pr: "16px", // keep right padding when drawer closed
-        }}
+        sx={
+          {
+            // pr: "16px", // keep right padding when drawer closed
+          }
+        }
       >
         <IconButton
           edge="start"

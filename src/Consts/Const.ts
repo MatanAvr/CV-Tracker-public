@@ -1,13 +1,13 @@
 import {
-  EntryType,
-  NewEntryConfigType,
+  ApplicationType,
+  NewApplicationConfigType,
   SystemConfigType,
   UserLinksType,
   UserType,
 } from "../Types/Types";
 
 export const LOCAL_STORAGE_DATA_KEY = "data";
-export const ENTRY_PREFIX = "EN-";
+export const APPLICATION_PREFIX = "AP-";
 export const USER_PREFIX = "US-";
 
 export const tableColumns = [
@@ -26,9 +26,9 @@ export const emptyUserLinks: UserLinksType = {
   personalWebsiteLink: "",
 };
 
-export const testEntries: EntryType[] = [
+export const testEntries: ApplicationType[] = [
   {
-    id: "EN-pgEHWqoK8-h4h7VmZVbH3",
+    id: "AP-pgEHWqoK8-h4h7VmZVbH3",
     date: "01/04/2024",
     company: "Facebook",
     role: "Front-end",
@@ -37,7 +37,7 @@ export const testEntries: EntryType[] = [
     notes: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   },
   {
-    id: "EN-nalBBCuMVhrNJIF08xVm2",
+    id: "AP-nalBBCuMVhrNJIF08xVm2",
     date: "05/04/2024",
     company: "Google",
     role: "Back-end",
@@ -47,7 +47,7 @@ export const testEntries: EntryType[] = [
       "In exercitationem voluptatem ullam blanditiis ipsa impedit nam, molestias modi optio est saepe quae quidem quod qui?",
   },
   {
-    id: "EN-RcghHaLUfXSGS63Y_LsRF",
+    id: "AP-RcghHaLUfXSGS63Y_LsRF",
     date: "11/04/2024",
     company: "Amazon",
     role: "Fullstack",
@@ -57,7 +57,7 @@ export const testEntries: EntryType[] = [
       "molestias modi optio est saepe quae quidem quod qui? Id, porro nulla.",
   },
   {
-    id: "en-RcghHaLUTXSGS63Y_LsRF",
+    id: "AP-RcghHaLUTXSGS63Y_LsRF",
     date: "15/04/2024",
     company: "Amazon",
     role: "very long role name",
@@ -90,7 +90,7 @@ export const emptyUser: UserType = {
   entries: [],
 };
 
-export const emptyEntry: EntryType = {
+export const emptyApplication: ApplicationType = {
   id: "",
   date: "",
   company: "",
@@ -106,7 +106,7 @@ export const systemConfig: SystemConfigType = {
   deafaultStatus: "Sent CV",
 };
 
-export const newEntryConfig: NewEntryConfigType = {
+export const newApplicationConfig: NewApplicationConfigType = {
   todayAsDefault: systemConfig.todayAsDefault,
   deafaultStatus: systemConfig.deafaultStatus,
 };

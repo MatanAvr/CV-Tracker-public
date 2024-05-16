@@ -25,13 +25,6 @@ export const copyToClipboard = async (text: string) => {
   }
 };
 
-const urlRegex =
-  /^(?:https?):\/\/(?:www\.)?[a-zA-Z0-9]+(?:\.[a-zA-Z]{2,})+(?:\/[\w-]+)*(?:\/)?(?:\?[a-zA-Z0-9-._]+=(?:[a-zA-Z0-9-._]+)?(?:&[a-zA-Z0-9-._]+=(?:[a-zA-Z0-9-._]+)?)*)?(?:#[a-zA-Z0-9-._]+)?$/;
-
-export const isValidUrl = (url: string): boolean => {
-  return urlRegex.test(url);
-};
-
 export function deepEqual(obj1: any, obj2: any): boolean {
   // Check if both arguments are objects
   if (

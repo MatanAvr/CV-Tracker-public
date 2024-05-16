@@ -2,10 +2,9 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import cloneDeep from "lodash.clonedeep";
-import { LOCAL_STORAGE_DATA_KEY, emptyApplication } from "../Consts/Const";
+import { LOCAL_STORAGE_DATA_KEY } from "../Consts/Const";
 import MainTable from "./MainTable";
 import {
   SnackBarColorsType,
@@ -14,7 +13,7 @@ import {
   ApplicationType,
 } from "../Types/Types";
 import { useMemo, useState } from "react";
-import { Fab, Tooltip, Typography } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import { Copyright } from "./Copyright";
 import { UserLinks } from "./UserLinks";
 import { saveInLocalStorage } from "../Utils/Utils";
@@ -24,12 +23,13 @@ import { isValidUser } from "../Schemas/schemeValidators";
 import { UserLinksFormModal } from "./Forms/UserLinksFormModal";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import SearchBar from "./SearchBar";
+import AddNewApplicationButton from "./AddNewApplicationButton";
 
-type DashboardProps = {
+type ApplicationsProps = {
   user: UserType;
 };
 
-export const Dashboard = ({ user }: DashboardProps) => {
+export const Applications = ({ user }: ApplicationsProps) => {
   const [currentUser, setCurrentUser] = useState<UserType>(user);
   const [filteredApplications, setFilteredApplications] = useState<
     ApplicationType[] | undefined
@@ -185,16 +185,9 @@ export const Dashboard = ({ user }: DashboardProps) => {
             alignItems={"center"}
             justifyContent={"flex-start"}
           >
-            <Tooltip title="Add new application">
-              <Fab
-                color="primary"
-                aria-label="Add new application"
-                size="small"
-                onClick={() => setApplicationToEdit(emptyApplication)}
-              >
-                <AddRoundedIcon />
-              </Fab>
-            </Tooltip>
+            <AddNewApplicationButton
+              setApplicationToEdit={setApplicationToEdit}
+            />
 
             {currentUser && (
               <UserLinks user={currentUser} openSnackBar={openSnackBar} />
@@ -211,10 +204,12 @@ export const Dashboard = ({ user }: DashboardProps) => {
           </Box>
 
           <Box display={"flex"} flex={1} justifyContent={"center"}>
-            <SearchBar
-              applications={currentUser.entries}
-              setFilteredApplications={setFilteredApplications}
-            />
+            {currentUser.entries.length > 0 && (
+              <SearchBar
+                applications={currentUser.entries}
+                setFilteredApplications={setFilteredApplications}
+              />
+            )}
           </Box>
 
           <Box display={"flex"} flex={1} />
@@ -227,8 +222,18 @@ export const Dashboard = ({ user }: DashboardProps) => {
               editHandler={editApplicationByIdHandler}
             />
           ) : (
-            <Box display={"flex"} flex={1} justifyContent={"center"}>
+            <Box
+              display={"flex"}
+              flex={1}
+              flexDirection={"column"}
+              alignItems={"center"}
+              p={1}
+              gap={2}
+            >
               <Typography variant="h5">Add new applications!</Typography>
+              <AddNewApplicationButton
+                setApplicationToEdit={setApplicationToEdit}
+              />
             </Box>
           )}
         </Grid>

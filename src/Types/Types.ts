@@ -31,3 +31,5 @@ export type NewApplicationConfigType = Pick<
   SystemConfigType,
   "todayAsDefault" | "deafaultStatus"
 >;
+
+export type PagesType = "" | "Applications";

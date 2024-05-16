@@ -25,11 +25,11 @@ import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import SearchBar from "./SearchBar";
 import AddNewApplicationButton from "./AddNewApplicationButton";
 
-type DashboardProps = {
+type ApplicationsProps = {
   user: UserType;
 };
 
-export const Dashboard = ({ user }: DashboardProps) => {
+export const Applications = ({ user }: ApplicationsProps) => {
   const [currentUser, setCurrentUser] = useState<UserType>(user);
   const [filteredApplications, setFilteredApplications] = useState<
     ApplicationType[] | undefined

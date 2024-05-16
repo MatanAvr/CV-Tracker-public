@@ -1,8 +1,8 @@
 import { Toolbar, Box, Typography, styled, IconButton } from "@mui/material";
 import logoIcon from "../Assets/images/CV-tracker-logo.webp";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { APP_NAME, DRAWER_WIDTH, HEADER_HEIGHT } from "../Consts/ui";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -56,7 +56,7 @@ export default function Header({ open, toggleDrawer }: HeaderProps) {
             ...(open && { display: "none" }),
           }}
         >
-          <SettingsIcon />
+          <MenuRoundedIcon />
         </IconButton>
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
           <img src={logoIcon} height={35} width={35} alt="logo" />
@@ -70,11 +70,6 @@ export default function Header({ open, toggleDrawer }: HeaderProps) {
         >
           {APP_NAME}
         </Typography>
-        {/* <IconButton color="inherit">
-        <Badge badgeContent={0} color="secondary">
-          <AccountCircleRoundedIcon fontSize="large" />
-        </Badge>
-      </IconButton> */}
       </Toolbar>
     </AppBar>
   );

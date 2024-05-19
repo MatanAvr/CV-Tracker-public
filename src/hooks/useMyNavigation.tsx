@@ -7,7 +7,6 @@ export const useMyNavigation = () => {
 
   const push = useCallback(
     (newPage: PagesType) => {
-      document.title = `Podcai | ${newPage}`;
       navigate(`/${newPage}`);
     },
     [, navigate]

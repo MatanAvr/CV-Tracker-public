@@ -19,7 +19,7 @@ export const ConfirmDeleteModal = ({
         <Typography variant="body2">
           You won't be able to revert this!
         </Typography>
-        <Button variant="contained" color="warning" onClick={onConfirm}>
+        <Button variant="contained" color="error" onClick={onConfirm}>
           Delete
         </Button>
         <Button variant="contained" onClick={closeModal}>

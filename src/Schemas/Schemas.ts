@@ -16,7 +16,7 @@ export const ApplicationSchema = z.object({
   id: z.string().min(1).max(30),
   date: z.string().min(1).max(30),
   company: z.string().min(1).max(30),
-  role: z.string().min(1).max(30),
+  role: z.string().min(1).max(50),
   link: optionalUrl,
   status: z.string().min(1).max(30).optional(),
   notes: z.string().min(0).max(400).optional(),

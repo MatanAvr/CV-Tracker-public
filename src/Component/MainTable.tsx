@@ -61,8 +61,8 @@ export default function MainTable({
           {data.map((row, index) => (
             <TableRow key={`row-${index}`}>
               <TableCell width={120}>{row.date}</TableCell>
-              <TableCell width={120}>{row.company}</TableCell>
-              <TableCell width={120}>{row.role}</TableCell>
+              <TableCell>{row.company}</TableCell>
+              <TableCell>{row.role}</TableCell>
               <TableCell width={120}>
                 {row.link ? (
                   <Link href={row.link} target="_blank" variant="body2">
